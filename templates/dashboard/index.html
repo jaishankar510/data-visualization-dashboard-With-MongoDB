@@ -1,0 +1,566 @@
+{% extends 'partials/base.html' %}
+
+{% block title %} Home Page {% endblock title %}
+
+    {% block content %}
+
+    {% comment %} {% if user.is_authenticated and user.is_staff and user.is_superuser %}
+    {% include 'partials/topnav.html' %} {% endcomment %}
+
+    <!--Graphs-->
+    {% comment %} <div class="container">
+        <div class="row my-5">
+            <div class="col-md-6">
+                <div class="bg-white">
+                    <canvas id="myChart1" width="400" height="300"></canvas>
+                    <script>
+                        var ctx = document.getElementById('myChart1').getContext('2d');
+                        var myChart1 = new Chart(ctx, {
+                            type: 'pie',
+                            data: {
+                                labels: [{% for item in total_data %}  '{{item.intensity}}',    {% endfor %}],
+                                datasets: [{
+                                    label: 'All_data',
+                                    data: [{% for item in total_data %} '{{item.intensity}}', {% endfor %}],
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="bg-white">
+                    <canvas id="myChart" width="400" height="300"></canvas>
+                    <script>
+                        var ctx = document.getElementById('myChart').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: [{% for item in total_data %}  '{{item.intensity}}',    {% endfor %}],
+                                datasets: [{
+                                    label: 'Products',
+                                    data: [{% for item in total_data %}  '{{item.intensity}}',    {% endfor %}],
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div> {% endcomment %}
+    <!--End Graphs-->
+
+
+{% comment %} 
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Multi-Chart Visualization</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            .chart-container {
+                width: 1000px;
+                height: 500px;
+                margin: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <!-- Line Chart -->
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Line Chart</h2>
+                    <div class="chart-container">
+                        <canvas id="lineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Bar Chart -->
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Bar Chart</h2>
+                    <div class="chart-container">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Pie Chart -->
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Pie Chart</h2>
+                    <div class="chart-container">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Radar Chart -->
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Radar Chart</h2>
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Polar Area Chart -->
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Polar Area Chart</h2>
+                    <div class="chart-container">
+                        <canvas id="polarAreaChart"></canvas>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Doughnut Chart -->
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Doughnut Chart</h2>
+                    <div class="chart-container">
+                        <canvas id="doughnutChart"></canvas>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Bubble Chart -->
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Bubble Chart</h2>
+                    <div class="chart-container">
+                        <canvas id="bubbleChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <script>
+            // ... Chart configurations ...
+    
+            // Line Chart Data
+            var lineData = {
+                labels: [{% for item in total_data %} '{{ item.intensity}}', {% endfor %} ],
+                datasets: [{
+                    label: 'intensity',
+                    data: [{% for item in total_data %} '{{ item.intensity}}', {% endfor %}],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            };
+            var lineChart = new Chart(document.getElementById('lineChart'), {
+                type: 'line',
+                data: lineData
+            });
+    
+            // Bar Chart Data
+            var barData = {
+                labels: [{% for item in total_data %} '{{ item.likelihood}}', {% endfor %}],
+                datasets: [{
+                    label: 'Likelihood',
+                    data: [{% for item in total_data %} '{{ item.likelihood}}', {% endfor %}],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(0, 128, 0, 0.6)' // Additional color
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(0, 128, 0, 1)' // Additional color
+                    ],
+                    borderWidth: 1
+                }]
+            };
+            var barChart = new Chart(document.getElementById('barChart'), {
+                type: 'bar',
+                data: barData
+            });
+    
+            // Pie Chart Data
+            var pieData = {
+                labels: [{% for item in total_data %} '{{ item.relevance}}', {% endfor %}],
+                datasets: [{
+                    label: 'Relevance',
+                    data: [{% for item in total_data %} '{{ item.relevance}}', {% endfor %}],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(0, 128, 0, 0.6)' // Additional color
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(0, 128, 0, 1)' // Additional color
+                    ],
+                    borderWidth: 1
+                }]
+            };
+            var pieChart = new Chart(document.getElementById('pieChart'), {
+                type: 'pie',
+                data: pieData
+            });
+    
+            // ... Continue adding chart configurations for Radar, Polar Area, Doughnut, and Bubble charts ...
+
+
+
+
+    
+        </script>
+    </body>
+    </html>
+     {% endcomment %}
+
+
+     <!DOCTYPE html>
+     <html>
+     <head>
+         <title>Multi-Chart Visualization</title>
+         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+         <style>
+             .chart-container {
+                 width: 1500px;
+                 height: 500px;
+                 margin: 20px;
+             }
+         </style>
+     </head>
+     <body>
+         <div class="container">
+             <!-- Line Chart -->
+
+{% comment %}              
+             <div class="row">
+                 <div class="col-md-10">
+                     <h2>Intensity</h2>
+                     <div class="chart-container">
+                         <canvas id="lineChart"></canvas>
+                     </div>
+                 </div>
+             </div> {% endcomment %}
+     
+             <!-- Bar Chart -->
+             {% comment %} <div class="row">
+                 <div class="col-md-10">
+                     <h2>Likelihood</h2>
+                     <div class="chart-container">
+                         <canvas id="barChart"></canvas>
+                     </div>
+                 </div>
+             </div> {% endcomment %}
+     
+             <!-- Pie Chart -->
+             <div class="row">
+                 <div class="col-md-10">
+                     <h2>Relevance</h2>
+                     <div class="chart-container">
+                         <canvas id="pieChart"></canvas>
+                     </div>
+                 </div>
+             </div>
+
+
+<!--=========================================================================================================================-->
+
+
+             <!--div class="container"-->
+                <!-- Line Chart -->
+                <div class="row">
+                    <div class="col-md-10">
+                        <h2>Year</h2>
+                        <div class="chart-container">
+                            <canvas id="lineChart2"></canvas>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Bar Chart -->
+                <div class="row">
+                    <div class="col-md-10">
+                        <h2>Country</h2>
+                        <div class="chart-container">
+                            <canvas id="barChart2"></canvas>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- line Chart -->
+                <div class="row">
+                    <div class="col-md-10">
+                        <h2>Topics</h2>
+                        <div class="chart-container">
+                            <canvas id="lineChart3"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- line Chart -->
+                <div class="row">
+                    <div class="col-md-10">
+                        <h2>Region</h2>
+                        <div class="chart-container">
+                            <canvas id="lineChart4"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+
+
+           
+     
+         <script>
+             // 1) Line Chart
+             var lineData = {
+                 labels: [{% for item in total_data %}  '{{ item.intensity}}',  {% endfor %}],
+                 datasets: [{
+                     label: 'Intensity',
+                     data: [{% for item in total_data %}  '{{ item.intensity}}',  {% endfor %}],
+                     borderColor: 'rgba(75, 192, 192, 1)',
+                     borderWidth: 2,
+                     fill: false
+                 }]
+             };
+             var lineChart = new Chart(document.getElementById('lineChart'), {
+                 type: 'line',
+                 data: lineData
+             });
+     
+             //2) Bar Chart
+             {% comment %} var barData = {
+                 labels: [{% for item in total_data %}  '{{ item.likelihood}}',  {% endfor %}],
+                 datasets: [{
+                     label: 'Likelihood',
+                     data: [{% for item in total_data %}  '{{ item.likelihood}}',  {% endfor %}],
+                     backgroundColor: [
+                         'rgba(255, 99, 132, 0.6)',
+                         'rgba(54, 162, 235, 0.6)',
+                         'rgba(255, 206, 86, 0.6)',
+                         'rgba(75, 192, 192, 0.6)',
+                         'rgba(153, 102, 255, 0.6)',
+                         'rgba(255, 159, 64, 0.6)',
+                     ],
+                     borderColor: [
+                         'rgba(255, 99, 132, 1)',
+                         'rgba(54, 162, 235, 1)',
+                         'rgba(255, 206, 86, 1)',
+                         'rgba(75, 192, 192, 1)',
+                         'rgba(153, 102, 255, 1)',
+                         'rgba(255, 159, 64, 1)'
+                     ],
+                     borderWidth: 1
+                 }]
+             };
+             var barChart = new Chart(document.getElementById('barChart'), {
+                 type: 'bar',
+                 data: barData
+             }); {% endcomment %}
+
+
+     
+             // 3)Pie Chart
+             var pieData = {
+                 labels: [{% for item in total_data %}  '{{ item.relevance}}',  {% endfor %}],
+                 datasets: [{
+                     label: 'Relevance',
+                     data: [{% for item in total_data %}  '{{ item.relevance}}',  {% endfor %}],
+                     backgroundColor: [
+                         'rgba(255, 99, 132, 0.6)',
+                         'rgba(54, 162, 235, 0.6)',
+                         'rgba(255, 206, 86, 0.6)',
+                         'rgba(75, 192, 192, 0.6)',
+                         'rgba(153, 102, 255, 0.6)',
+                         'rgba(255, 159, 64, 0.6)'
+                     ],
+                     borderColor: [
+                         'rgba(255, 99, 132, 1)',
+                         'rgba(54, 162, 235, 1)',
+                         'rgba(255, 206, 86, 1)',
+                         'rgba(75, 192, 192, 1)',
+                         'rgba(153, 102, 255, 1)',
+                         'rgba(255, 159, 64, 1)'
+                     ],
+                     borderWidth: 1
+                 }]
+             };
+             var pieChart = new Chart(document.getElementById('pieChart'), {
+                 type: 'pie',
+                 data: pieData
+             });
+     
+
+//========================================================================================================================================================================================
+
+             //4)line chart
+             var lineData = {
+                labels: [{% for item in total_data %}  '{{ item.start_year}}',  {% endfor %}],
+                datasets: [{
+                    label: 'start_year',
+                    data: [{% for item in total_data %}  '{{ item.start_year}}',  {% endfor %}],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            };
+            var lineChart = new Chart(document.getElementById('lineChart2'), {
+                type: 'line',
+                data: lineData
+            });
+
+
+    
+            // 5)Bar Chart
+            var barData = {
+                labels: [{% for item in total_data %}  '{{ item.country }}',  {% endfor %}],
+                datasets: [{
+                    label: 'country',
+                    data: [{% for item in total_data %}  '{{ item.country }}',  {% endfor %}],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+            var barChart = new Chart(document.getElementById('barChart2'), {
+                type: 'bar',
+                data: barData
+            });
+    
+            // 6)line Chart
+
+            var lineData = {
+                labels: [{% for item in total_data %}  '{{ item.topic }}',  {% endfor %}],
+                datasets: [{
+                    label: 'topic',
+                    data: [{% for item in total_data %}  '{{ item.topic }}',  {% endfor %}],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            };
+            var lineChart = new Chart(document.getElementById('lineChart3'), {
+                type: 'line',
+                data: lineData
+            });
+
+
+            //===========================================================================================================================
+    
+
+            
+            // 7)line Chart
+
+            var lineData = {
+                labels: [{% for item in total_data %}  '{{ item.region}}',  {% endfor %}],
+                datasets: [{
+                    label: 'region',
+                    data: [{% for item in total_data %}  '{{ item.region }}',  {% endfor %}],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            };
+            var lineChart = new Chart(document.getElementById('lineChart4'), {
+                type: 'line',
+                data: lineData
+            });
+    
+            
+
+
+         </script>
+     </body>
+     </html>
+     
+
+
+
+
+    {% endblock  %}
